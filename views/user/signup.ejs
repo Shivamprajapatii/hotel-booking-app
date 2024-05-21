@@ -1,0 +1,28 @@
+<% layout('/layouts/boilerplate') -%>
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+        <h1>SignUP on Wnaderlus t</h1>
+        <form action="/signup" method="POST" class="needs-validation" novalidate>
+
+            <div class="mb-3">
+                <label for="username" class="form-label">USername</label>
+                <input type="text" name="username" placeholder="Add a Catchy Title" class="form-control" required>
+                <div class="valid-feedback">looks Good!</div>
+             </div>
+
+             <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" placeholder="enter email address" class="form-control" required>
+                <div class="valid-feedback">looks Good!</div>
+             </div>
+
+             <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" placeholder="Enter Password" id="password" class="form-control" required>
+                <div class="valid-feedback">looks Good!</div>
+             </div>
+
+            <button class="btn btn-success  mt-3">SingUP</button> 
+        </form>
+    </div>
+</div>
