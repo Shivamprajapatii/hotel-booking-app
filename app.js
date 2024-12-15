@@ -2,7 +2,6 @@ if(process.env.NODE_ENV != "production"){
     require('dotenv').config()
 }
 
-
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -10,23 +9,17 @@ const User = require('./models/user.js');
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
 const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStatergy = require("passport-local");
 
-
-
-
 const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js"); 
 const userRouter = require("./routes/user.js");
 
-
-// let MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
-const dbUrl = process.env.ATLASDB_URL;
+const DB_URL = process.env.ATLASDB_URL;
 
 main().then(() => {
     console.log("Database Connected!");
@@ -34,10 +27,8 @@ main().then(() => {
     console.log(err);
 })
 async function main() {
-    await mongoose.connect(dbUrl);
+    await mongoose.connect(DB_URL);
 }
-
-
 
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
@@ -46,9 +37,8 @@ app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-
 const store = MongoStore.create({
-    mongoUrl : dbUrl,
+    mongoUrl : DB_URL,
     crypto: {
         secret : process.env.SECRET,
     },
@@ -71,15 +61,6 @@ const sessionOption = {
     }
 }
 
-
-// Home Route
-// app.get("/",(req,res,next) => {
-//     res.send("Hii I am Root");
-// });
-
-
-
-
 app.use(session(sessionOption));
 app.use(flash());
 
@@ -101,6 +82,9 @@ app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter);
 app.use("/",userRouter);
 
+app.get('/listings?', async (req, res) => {
+    const searchQuery = req.query.q; 
+});
 
 app.use((err,req,res,next) => {
     let {stausCode = 500,message="Something Went Wrong"} = err;
@@ -114,5 +98,3 @@ const port = 3000;
 app.listen(3000,() => {
     console.log(`Server is listing to Port ${port}`);
 });
-
-
