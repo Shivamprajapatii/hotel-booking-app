@@ -98,7 +98,7 @@ app.use((err,req,res,next) => {
 });
 
  // Server Route and Port Number
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.listen(3000,() => {
     console.log(`Server is listing to Port ${port}`);
 });
