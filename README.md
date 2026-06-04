@@ -23,7 +23,9 @@
     copy the uid from the user collection and then go to /init/index.js
      update the UID in the code and then run this command 
 
-     > node /init/index.js      
+     > node /init/index.js 
+
+     Verify in the listing collection and loo for the admin UID is it updated or not.     
 
 # Command to run the Project 
     Since this is not a react and next js project so build is not required.
