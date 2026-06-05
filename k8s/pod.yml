@@ -2,13 +2,36 @@ apiVersion: v1
 kind: Pod
 
 metadata: 
-  name: wonderlust-pod
+  name: wonderlust-pod-1
   namespace: wonderlust-prod
+
+  labels:
+    app: prod
+    env: prod 
 
 spec: 
   containers:
   - name: wonderlust-app
     image: shivamsdeng/wonderlust:latest
     ports: 
-      - containerPort: 80 
+    - containerPort: 80
 
+---
+
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: wonderlust-pod-2
+  namespace: wonderlust-prod
+
+  labels:
+    app: dev
+    env: dev
+
+spec:
+  containers:
+  - name: wonderlust-app
+    image: shivamsdeng/wonderlust:latest
+    ports:
+    - containerPort: 80
