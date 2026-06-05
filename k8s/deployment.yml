@@ -1,2 +1,27 @@
+apiVersion: apps/v1
 kind: Deployment
-apiVersion: 
+
+metadata:
+  name: wonderlust-deployment
+  namespace: wonderlust-prod
+
+spec:
+  replicas: 3
+
+  selectors: 
+    matchLabels:
+      app: wonderlust-app
+
+# This is the Pod blueprint. Whenever Kubernetes needs a new Pod:
+  template:
+    metadata:
+      labels:
+        app: wonderlust-app
+        env: prod
+
+    spec:
+      containers:
+      - name: wonderlusta-app
+        image: shivamsdeng/wonderlust:latest
+        ports:
+        - containerPort: 3000
