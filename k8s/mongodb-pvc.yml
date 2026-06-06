@@ -1,0 +1,17 @@
+# In the we define our namespace
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: wonderlust-mongo-data
+  namespace: wonderlust-prod
+
+spec: 
+  storageClassName: manual
+  
+  accessModes:
+    - ReadWriteOnce
+  
+  resources:
+    requests:
+      storage: 1Gi

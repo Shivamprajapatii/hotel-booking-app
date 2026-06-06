@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolume
+
+metadata: 
+  name: mongo-data-pv
+
+spec: 
+  storageClassName: manual
+
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 3Gi
+  
+  hostPath:
+    path: /data/mongo
+  
+

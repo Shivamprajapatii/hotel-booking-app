@@ -3,3 +3,6 @@ kind: Namespace
 
 metadata: 
   name: wonderlust-prod
+
+  labels:
+  environment: production
