@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: wonderlust-config
+  namespace: wonderlust-prod
+
+data:
+  DB_HOST: "mongodb://mongodb-service:27017/wonderlust"
+  PORT: "3000"
+  NODE_ENV: "production"
