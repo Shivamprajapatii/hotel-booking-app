@@ -2,13 +2,13 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: wonderlust-deployment
+  name: wonderlust
   namespace: wonderlust-prod
 
 spec:
   replicas: 3
 
-  selectors: 
+  selector: 
     matchLabels:
       app: wonderlust-app
 
@@ -23,5 +23,12 @@ spec:
       containers:
       - name: wonderlusta-app
         image: shivamsdeng/wonderlust:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
+        envFrom:
+          - configMapRef: 
+              name: wonderlust-config
+          - secretRef:
+              name: wonderlust-secret
+      
