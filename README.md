@@ -15,6 +15,15 @@
     SECRET=HJKSDSDFSD
     MULTER_Storage_Credentaials=
 
+# Run the Application 
+
+    > node app.js
+
+<img src="./public/images/1.png">
+
+**Note**- You will not get anything Cause There is no any listing. so lets intialize the exsitng sampel data and owner will be a admin. but first create a admin and then add the admin uuid into intilize index.js file so that all lsiting will show admin is the owner.
+
+
 # Initiliaze Admin Databae 
     initally some listing will be there so someone should be admin of those listing so first create a user using post request example 
 
@@ -26,17 +35,14 @@
         "password": "admin@123"
     };
 
+<img src="./public/images/1.png">
+
+
 ## Login Into DB and Create a admin User Name with this Credentials and copi the uuid 
 
     > docker exec -it wanderlust-mongodb mongosh
     > use wanderlust
     > db.users.find()
-    
-    > db.users.insertOne({
-|     username: "admin",
-|     email: "admin@example.com",
-|     isAdmin: true
-|     })
 
 **Ex- insertedId: ObjectId('6a9493daa8fbee98251b13b9')**
 
