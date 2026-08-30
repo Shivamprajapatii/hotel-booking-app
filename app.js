@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV != "production"){
+if (process.env.NODE_ENV != "production") {
     require('dotenv').config()
 }
 
@@ -16,10 +16,10 @@ const passport = require("passport");
 const LocalStatergy = require("passport-local");
 
 const listingsRouter = require("./routes/listing.js");
-const reviewsRouter = require("./routes/review.js"); 
+const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-const DB_URL = process.env.ATLASDB_URL;
+const DB_URL = process.env.MONGODB_URI;
 
 main().then(() => {
     console.log("Database Connected!");
@@ -30,34 +30,34 @@ async function main() {
     await mongoose.connect(DB_URL);
 }
 
-app.set("view engine","ejs");
-app.set("views",path.join(__dirname,"views"));
-app.use(express.urlencoded({extended : true}));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-app.engine("ejs",ejsMate);
-app.use(express.static(path.join(__dirname,"/public")));
+app.engine("ejs", ejsMate);
+app.use(express.static(path.join(__dirname, "/public")));
 
 const store = MongoStore.create({
-    mongoUrl : DB_URL,
+    mongoUrl: DB_URL,
     crypto: {
-        secret : process.env.SECRET,
+        secret: process.env.SECRET,
     },
-    touchAfter : 24 * 3600,
+    touchAfter: 24 * 3600,
 });
 
-store.on("error",() => {
+store.on("error", (err) => {
     console.log("ERROR in Mongo SESSION Store", err);
 });
 
 const sessionOption = {
     store,
-    secret : process.env.SECRET,
-    resave : false,
-    saveUninitialized : true,
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
     cookie: {
-        expires: Date.now() + 7 * 24 * 60 * 60 *  1000,
-        maxAge : 7 + 24 * 60 * 60 * 1000,
-        httpOnly : true,
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
     }
 }
 
@@ -66,39 +66,48 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 passport.use(new LocalStatergy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-app.use((req,res,next) => {
+// GLOBAL VARIABLES FOR EJS
+app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currentUser = req.user;
+    res.locals.currentUser = req.user || null;
+
     next();
+});
+
+app.get("/health", (req, res) => {
+    res.send({
+        "msg":"app is healthy"
+    })
 });
 
 app.get('/', (req, res) => {
     res.redirect('/listings');
 });
 
-app.use("/listings",listingsRouter);
-app.use("/listings/:id/reviews",reviewsRouter);
-app.use("/",userRouter);
+app.use("/listings", listingsRouter);
+app.use("/listings/:id/reviews", reviewsRouter);
+app.use("/", userRouter);
 
 app.get('/listings?', async (req, res) => {
-    const searchQuery = req.query.q; 
+    const searchQuery = req.query.q;
 });
 
-app.use((err,req,res,next) => {
-    let {stausCode = 500,message="Something Went Wrong"} = err;
+app.use((err, req, res, next) => {
+    let { stausCode = 500, message = "Something Went Wrong" } = err;
     // res.staus(statuCode).render("error.ejs",{message})
-    res.status(stausCode).render("error.ejs",{err});
+    res.status(stausCode).render("error.ejs", { err });
     // res.status(stausCode).send(message);
 });
 
- // Server Route and Port Number
-const port = process.env.PORT || 3000;
-app.listen(3000,() => {
+// Server Route and Port Number
+const port = process.env.PORT;
+app.listen(3000, () => {
     console.log(`Server is listing to Port ${port}`);
 });
