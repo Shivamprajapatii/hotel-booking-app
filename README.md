@@ -3,9 +3,16 @@
 
     > nvm use 20 
 
+    > npm install
+
+    > docker pull mongo:8
+
+    > docker run -d --name wanderlust-mongodb -p 27017:27017 -v wanderlust-mongo-data:/data/db mongo:8
+
 # Update .env 
-    ATLASDB_URL=
-    SECRET=
+    MONGODB_URI=mongodb://127.0.0.1:27017/wanderlust
+    PORT=3000
+    SECRET=HJKSDSDFSD
     MULTER_Storage_Credentaials=
 
 # Initiliaze Admin Databae 
@@ -18,6 +25,20 @@
         "email": "admin@gmail.com",
         "password": "admin@123"
     };
+
+## Login Into DB and Create a admin User Name with this Credentials and copi the uuid 
+
+    > docker exec -it wanderlust-mongodb mongosh
+    > use wanderlust
+    > db.users.find()
+    
+    > db.users.insertOne({
+|     username: "admin",
+|     email: "admin@example.com",
+|     isAdmin: true
+|     })
+
+**Ex- insertedId: ObjectId('6a9493daa8fbee98251b13b9')**
 
 # Next Step:
     copy the uid from the user collection and then go to /init/index.js
